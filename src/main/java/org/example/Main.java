@@ -1,71 +1,59 @@
 package org.example;
-import java.util.Random;
+
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Insert the starting position as a line");
+        menu();
+    }
 
-
+    public static void menu() {
         char[][] matrix = new char[3][3];
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 matrix[i][j] = ' ';
             }
         }
-        printMatrix(matrix);
-        play(matrix);
-    }
-    public static void play(char[][] matrix){
-        if(checkWinner(matrix).equals("Game not finished")) {
-            Scanner sc = new Scanner(System.in);
-            System.out.println("Enter the coordinates:");
-            int row = -1;
-            int column = -1;
-            if (sc.hasNextInt() && sc.hasNextInt()) {
-                row = sc.nextInt();
-                column = sc.nextInt();
-            } else {
-                System.out.println("You should enter numbers!");
-                play(matrix);
-            }
-            if (row > 3 || row < 1 || column > 3 || column < 1) {
-                System.out.println("Coordinates should be from 1 to 3!");
-                play(matrix);
-            }
-            else if (matrix[row - 1][column - 1] != ' ') {
-                System.out.println("This cell is occupied! Choose another one!");
-                play(matrix);
-
-            }
-            else { matrix[row - 1][column - 1] = 'X';
-                if(checkWinner(matrix).equals("X wins")) {
-                    printMatrix(matrix);
-                    System.out.println(checkWinner(matrix));
-                    return;
-                } else if (checkWinner(matrix).equals("Draw")) {
-                    printMatrix(matrix);
-                    System.out.println(checkWinner(matrix));
-                    return;
-                } else {
-                    printMatrix(matrix);
-                    System.out.println("Making move level \"easy\"");
-                    matrix = playEasy(matrix);
-                    if(checkWinner(matrix).equals("O wins")) {
-                        printMatrix(matrix);
-                        System.out.println(checkWinner(matrix));
-                        return;
-                    }
-                    printMatrix(matrix);
-                    play(matrix);
-                }
-            }
-            play(matrix);
-        } else if(checkWinner(matrix).equals("Impossible")) {
-            System.out.println("This matrix is not valid");
-        } else if(checkWinner(matrix).equals("Draw")) {
-            System.out.println("It is a draw!");
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Input command:");
+        String input = sc.nextLine();
+        String[] strings = input.split(" ");
+        if(strings[0].equals("exit")) System.exit(0);
+        if(strings.length != 3) {
+            System.out.println("Bad parameters!");
+            menu();
         }
+        Player player1;
+        Player player2;
+        if(strings[0].equals("start") && (strings[1].equals("easy") || strings[1].equals("user")) && (strings[2].equals("easy") || strings[2].equals("user"))) {
+            if(strings[1].equals("easy")) {
+                player1 = new EasyAI();
+            } else player1 = new User();
+            if(strings[2].equals("easy")) {
+                player2 = new EasyAI();
+            } else player2 = new User();
+            printMatrix(matrix);
+            play(matrix, player1, player2);
+        } else {
+            System.out.println("Bad parameters!");
+            menu();
+        }
+    }
+
+    public static void play(char[][] matrix, Player player1, Player player2){
+        while(checkWinner(matrix).equals("Game not finished")) {
+            matrix = player1.play(matrix, 'X');
+            printMatrix(matrix);
+            if(checkWinner(matrix).equals("Game not finished")) {
+                matrix = player2.play(matrix, 'O');
+                printMatrix(matrix);
+            } else {
+                printMatrix(matrix);
+                System.out.println(checkWinner(matrix));
+                return;
+            }
+        }
+
     }
 
     public static String checkWinner(char[][] matrix) {
@@ -84,7 +72,7 @@ public class Main {
             return "O wins";
         }
 
-        if(contains(matrix)){
+        if(notFull(matrix)){
             return "Game not finished";
         }
         return "Draw";
@@ -138,7 +126,7 @@ public class Main {
         System.out.println("-----------");
     }
 
-    public static boolean contains(char[][] matrix) {
+    public static boolean notFull(char[][] matrix) {
         for (char[] chars : matrix) {
             for (char aChar : chars) {
                 if (aChar == ' ') {
@@ -147,17 +135,5 @@ public class Main {
             }
         }
         return false;
-    }
-
-    public static char[][] playEasy(char[][] matrix) {
-        Random random = new Random();
-        while(true) {
-            int row = random.nextInt(matrix.length);
-            int col = random.nextInt(matrix.length);
-            if(matrix[row][col] == ' ') {
-                matrix[row][col] = 'O';
-                return matrix;
-            }
-        }
     }
 }
