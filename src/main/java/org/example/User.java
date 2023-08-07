@@ -1,14 +1,11 @@
 package org.example;
 
-import org.example.FourthStage.Player;
-
 import java.util.Scanner;
 
-import static org.example.FourthStage.Main.checkWinner;
-import static org.example.Main.printMatrix;
+import static tictactoe.Main.checkWinner;
+import static tictactoe.Main.printMatrix;
 
-
-public class User extends Player {
+public class User extends Player{
     @Override
     public char[][] play(char[][] matrix, char yourChar) {
         if(checkWinner(matrix).equals("Game not finished")) {

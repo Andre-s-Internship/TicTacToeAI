@@ -1,6 +1,5 @@
 package org.example;
 
-import org.example.MediumAI;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -27,17 +26,22 @@ public class Main {
         Player player2;
 
         if(strings[0].equals("start") &&
-                Set.of("user", "easy", "medium").contains(strings[1]) &&
-                Set.of("user", "easy", "medium").contains(strings[2])) {
+                Set.of("user", "easy", "medium", "hard").contains(strings[1]) &&
+                Set.of("user", "easy", "medium", "hard").contains(strings[2])) {
 
-            if(strings[1].equals("easy")) player1 = new EasyAI();
-            else if(strings[1].equals("user")) player1 = new User();
-            else player1 = new MediumAI();
+            player1 = switch (strings[1]) {
+                case "easy" -> new EasyAI();
+                case "user" -> new User();
+                case "medium" -> new MediumAI();
+                default -> new HardAI();
+            };
 
-
-            if(strings[2].equals("easy")) player2 = new EasyAI();
-            else if(strings[2].equals("user")) player2 = new User();
-            else player2 = new MediumAI();
+            player2 = switch (strings[2]) {
+                case "easy" -> new EasyAI();
+                case "user" -> new User();
+                case "medium" -> new MediumAI();
+                default -> new HardAI();
+            };
 
             printMatrix(matrix);
             play(matrix, player1, player2);

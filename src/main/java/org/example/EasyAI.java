@@ -2,17 +2,16 @@ package org.example;
 
 import java.util.Random;
 
-import static org.example.FourthStage.Main.checkWinner;
-
+import static tictactoe.Main.checkWinner;
 
 public class EasyAI extends Player{
     @Override
     public char[][] play(char[][] matrix, char yourChar) {
-        if(checkWinner(matrix).equals("Game not finished")) {
-            System.out.println("Making move level \"easy\"");
-            matrix = randomMoveGenerator(matrix, yourChar);
-        }
-        return matrix;
+            if(checkWinner(matrix).equals("Game not finished")) {
+                System.out.println("Making move level \"easy\"");
+                matrix = randomMoveGenerator(matrix, yourChar);
+            }
+            return matrix;
     }
 
     public static char[][] randomMoveGenerator(char[][] matrix, char yourChar) {
