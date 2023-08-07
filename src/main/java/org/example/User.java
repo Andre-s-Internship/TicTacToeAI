@@ -1,11 +1,12 @@
 package org.example;
 
-import org.example.Player;
+import org.example.FourthStage.Player;
 
 import java.util.Scanner;
 
-import static org.example.ThirdStage.Main.checkWinner;
-import static org.example.ThirdStage.Main.printMatrix;
+import static org.example.FourthStage.Main.checkWinner;
+import static org.example.Main.printMatrix;
+
 
 public class User extends Player {
     @Override

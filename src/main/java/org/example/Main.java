@@ -1,6 +1,8 @@
 package org.example;
 
+import org.example.MediumAI;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Main {
     public static void main(String[] args) {
@@ -8,30 +10,35 @@ public class Main {
     }
 
     public static void menu() {
-        char[][] matrix = new char[3][3];
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                matrix[i][j] = ' ';
-            }
-        }
+        char[][] matrix = createEmptyDeck();
+
         Scanner sc = new Scanner(System.in);
         System.out.println("Input command:");
         String input = sc.nextLine();
         String[] strings = input.split(" ");
-        if(strings[0].equals("exit")) System.exit(0);
+
+        if(input.equals("exit")) System.exit(0);
         if(strings.length != 3) {
             System.out.println("Bad parameters!");
             menu();
         }
+
         Player player1;
         Player player2;
-        if(strings[0].equals("start") && (strings[1].equals("easy") || strings[1].equals("user")) && (strings[2].equals("easy") || strings[2].equals("user"))) {
-            if(strings[1].equals("easy")) {
-                player1 = new EasyAI();
-            } else player1 = new User();
-            if(strings[2].equals("easy")) {
-                player2 = new EasyAI();
-            } else player2 = new User();
+
+        if(strings[0].equals("start") &&
+                Set.of("user", "easy", "medium").contains(strings[1]) &&
+                Set.of("user", "easy", "medium").contains(strings[2])) {
+
+            if(strings[1].equals("easy")) player1 = new EasyAI();
+            else if(strings[1].equals("user")) player1 = new User();
+            else player1 = new MediumAI();
+
+
+            if(strings[2].equals("easy")) player2 = new EasyAI();
+            else if(strings[2].equals("user")) player2 = new User();
+            else player2 = new MediumAI();
+
             printMatrix(matrix);
             play(matrix, player1, player2);
         } else {
@@ -47,13 +54,15 @@ public class Main {
             if(checkWinner(matrix).equals("Game not finished")) {
                 matrix = player2.play(matrix, 'O');
                 printMatrix(matrix);
+                if(checkCharWinner(matrix, 'O')) {
+                    System.out.println(checkWinner(matrix));
+                    return;
+                }
             } else {
-                printMatrix(matrix);
                 System.out.println(checkWinner(matrix));
                 return;
             }
         }
-
     }
 
     public static String checkWinner(char[][] matrix) {
@@ -118,7 +127,7 @@ public class Main {
         return characterCount;
     }
 
-    public static void printMatrix(char[][] matrix) {
+    static void printMatrix(char[][] matrix) {
         System.out.println("-----------");
         for(int i = 0; i < 3; i++){
             System.out.println("| " + matrix[i][0] + " " + matrix[i][1] + " " + matrix[i][2] + " |");
@@ -126,7 +135,7 @@ public class Main {
         System.out.println("-----------");
     }
 
-    public static boolean notFull(char[][] matrix) {
+    static boolean notFull(char[][] matrix) {
         for (char[] chars : matrix) {
             for (char aChar : chars) {
                 if (aChar == ' ') {
@@ -135,5 +144,20 @@ public class Main {
             }
         }
         return false;
+    }
+
+    static char otherChar(char yourChar) {
+        if(yourChar == 'O') return 'X';
+        else return 'O';
+    }
+
+    static char[][] createEmptyDeck() {
+        char[][] matrix = new char[3][3];
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                matrix[i][j] = ' ';
+            }
+        }
+        return matrix;
     }
 }
