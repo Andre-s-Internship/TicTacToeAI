@@ -1,6 +1,6 @@
 package org.example;
 
-public abstract class Player {
+public interface Player {
 
-    public abstract char[][] play(char[][] matrix, char yourChar);
+    char[][] makeMove(char[][] matrix, char playerChar);
 }

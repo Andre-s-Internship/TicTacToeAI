@@ -1,23 +1,22 @@
 package org.example;
 
-import static tictactoe.Main.*;
+import static org.example.Matrix.*;
 
-public class MediumAI extends Player{
+public class MediumAI implements Player {
+
     @Override
-    public char[][] play(char[][] matrix, char yourChar) {
-        if (checkWinner(matrix).equals("Game not finished")) {
+    public char[][] makeMove(char[][] matrix, char playerChar) {
+        if (checkWinner(matrix).equals(Result.GAMENOTFINISHED)) {
             System.out.println("Making move level \"medium\"");
-            //1st rule
-            //Instant win
-            char[][] instantWin = instantWin(matrix, yourChar);
-            if(instantWin != null) return instantWin;
-            //2nd rule
-            //Prevent loss
-            char[][] preventLoss = preventLoss(matrix, yourChar);
-            if(preventLoss != null) return preventLoss;
-            //3rd rule
-            //Do random move
-            matrix = EasyAI.randomMoveGenerator(matrix, yourChar);
+            char[][] instantWin = instantWin(matrix, playerChar);
+            if (instantWin != null) {
+                return instantWin;
+            }
+            char[][] preventLoss = preventLoss(matrix, playerChar);
+            if (preventLoss != null) {
+                return preventLoss;
+            }
+            matrix = EasyAI.randomMoveGenerator(matrix, playerChar);
         }
         return matrix;
     }
@@ -30,7 +29,9 @@ public class MediumAI extends Player{
                     if (checkCharWinner(matrix, otherChar(yourChar))) {
                         matrix[i][j] = yourChar;
                         return matrix;
-                    } else matrix[i][j] = ' ';
+                    } else {
+                        matrix[i][j] = ' ';
+                    }
                 }
             }
         }
@@ -42,9 +43,11 @@ public class MediumAI extends Player{
             for (int j = 0; j < matrix[i].length; j++) {
                 if (matrix[i][j] == ' ') {
                     matrix[i][j] = yourChar;
-                    if (checkWinner(matrix).equals(yourChar + " wins")) {
+                    if (checkWinner(matrix).equals(Result.XWINS) || checkWinner(matrix).equals(Result.OWINS)) {
                         return matrix;
-                    } else matrix[i][j] = ' ';
+                    } else {
+                        matrix[i][j] = ' ';
+                    }
                 }
             }
         }

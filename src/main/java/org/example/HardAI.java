@@ -1,17 +1,18 @@
 package org.example;
 
-import static tictactoe.Main.*;
+import static org.example.Matrix.*;
 
-public class HardAI extends Player {
+public class HardAI implements Player {
+
     @Override
-    public char[][] play(char[][] matrix, char yourChar) {
+    public char[][] makeMove(char[][] matrix, char playerChar) {
         System.out.println("Making move level \"hard\"");
-        int[] bestMove = getBestMove(matrix, yourChar);
-        matrix[bestMove[0]][bestMove[1]] = yourChar;
+        int[] bestMove = getBestMove(matrix, playerChar);
+        matrix[bestMove[0]][bestMove[1]] = playerChar;
         return matrix;
     }
 
-    public int[] getBestMove(char[][] matrix, char yourChar) {
+    private int[] getBestMove(char[][] matrix, char yourChar) {
         int[] bestMove = new int[]{-1, -1};
         int bestScore = (yourChar == 'X') ? Integer.MIN_VALUE : Integer.MAX_VALUE;
 
@@ -33,15 +34,15 @@ public class HardAI extends Player {
         return bestMove;
     }
 
-    public static int minimax(char[][] matrix, int depth, char yourChar) {
+    private static int minimax(char[][] matrix, int depth, char yourChar) {
 
-        if (checkWinner(matrix).equals("X wins")) {
+        if (checkWinner(matrix).equals(Result.XWINS)) {
             return 10;
         }
-        if (checkWinner(matrix).equals("O wins")) {
+        if (checkWinner(matrix).equals(Result.OWINS)) {
             return -10;
         }
-        if (checkWinner(matrix).equals("Draw")) {
+        if (checkWinner(matrix).equals(Result.DRAW)) {
             return 0;
         }
 
