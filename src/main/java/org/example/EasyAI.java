@@ -10,13 +10,12 @@ public class EasyAI implements Player {
     public char[][] makeMove(char[][] matrix, char playerChar) {
         if (checkWinner(matrix).equals(Result.GAMENOTFINISHED)) {
             System.out.println("Making move level \"easy\"");
-            matrix = randomMoveGenerator(matrix, playerChar);
+            matrix = randomMoveGenerator(matrix, playerChar, new Random());
         }
         return matrix;
     }
 
-    public static char[][] randomMoveGenerator(char[][] matrix, char yourChar) {
-        Random random = new Random();
+    public static char[][] randomMoveGenerator(char[][] matrix, char yourChar, Random random) {
         while (true) {
             int row = random.nextInt(matrix.length);
             int col = random.nextInt(matrix.length);

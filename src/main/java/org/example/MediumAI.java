@@ -1,5 +1,7 @@
 package org.example;
 
+import java.util.Random;
+
 import static org.example.Matrix.*;
 
 public class MediumAI implements Player {
@@ -11,17 +13,16 @@ public class MediumAI implements Player {
             char[][] instantWin = instantWin(matrix, playerChar);
             if (instantWin != null) {
                 return instantWin;
-            }
-            char[][] preventLoss = preventLoss(matrix, playerChar);
+            }char[][] preventLoss = preventLoss(matrix, playerChar);
             if (preventLoss != null) {
                 return preventLoss;
             }
-            matrix = EasyAI.randomMoveGenerator(matrix, playerChar);
+            matrix = EasyAI.randomMoveGenerator(matrix, playerChar, new Random());
         }
         return matrix;
     }
 
-    static char[][] instantWin(char[][] matrix, char yourChar) {
+    static char[][] preventLoss(char[][] matrix, char yourChar) {
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[i].length; j++) {
                 if (matrix[i][j] == ' ') {
@@ -37,13 +38,12 @@ public class MediumAI implements Player {
         }
         return null;
     }
-
-    static char[][] preventLoss(char[][] matrix, char yourChar) {
+    static char[][] instantWin(char[][] matrix, char yourChar) {
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[i].length; j++) {
                 if (matrix[i][j] == ' ') {
                     matrix[i][j] = yourChar;
-                    if (checkWinner(matrix).equals(Result.XWINS) || checkWinner(matrix).equals(Result.OWINS)) {
+                    if (checkCharWinner(matrix, yourChar)) {
                         return matrix;
                     } else {
                         matrix[i][j] = ' ';
