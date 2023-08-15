@@ -2,25 +2,27 @@ package org.example;
 
 import java.util.Random;
 
-import static org.example.Matrix.checkWinner;
+public class EasyAI extends Player {
 
-public class EasyAI implements Player {
+    EasyAI(char playerChar) {
+        super(playerChar);
+    }
 
     @Override
-    public char[][] makeMove(char[][] matrix, char playerChar) {
-        if (checkWinner(matrix).equals(Result.GAMENOTFINISHED)) {
+    public Matrix makeMove(Matrix matrix) {
+        if (matrix.checkWinner().equals(Result.GAMENOTFINISHED)) {
             System.out.println("Making move level \"easy\"");
-            matrix = randomMoveGenerator(matrix, playerChar, new Random());
+            matrix = randomMoveGenerator(matrix, this.getPlayerChar(), new Random());
         }
         return matrix;
     }
 
-    public static char[][] randomMoveGenerator(char[][] matrix, char yourChar, Random random) {
+    public static Matrix randomMoveGenerator(Matrix matrix, char playerChar, Random random) {
         while (true) {
-            int row = random.nextInt(matrix.length);
-            int col = random.nextInt(matrix.length);
-            if (matrix[row][col] == ' ') {
-                matrix[row][col] = yourChar;
+            int row = random.nextInt(matrix.length());
+            int col = random.nextInt(matrix.length());
+            if (matrix.getChar(row, col) == ' ') {
+                matrix.performMove(playerChar, row, col);
                 return matrix;
             }
         }

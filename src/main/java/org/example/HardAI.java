@@ -2,28 +2,32 @@ package org.example;
 
 import static org.example.Matrix.*;
 
-public class HardAI implements Player {
+public class HardAI extends Player {
+
+    HardAI(char playerChar) {
+        super(playerChar);
+    }
 
     @Override
-    public char[][] makeMove(char[][] matrix, char playerChar) {
+    public Matrix makeMove(Matrix matrix) {
         System.out.println("Making move level \"hard\"");
-        int[] bestMove = getBestMove(matrix, playerChar);
-        matrix[bestMove[0]][bestMove[1]] = playerChar;
+        int[] bestMove = getBestMove(matrix);
+        matrix.performMove(this.getPlayerChar(), bestMove[0], bestMove[1]);
         return matrix;
     }
 
-    private int[] getBestMove(char[][] matrix, char yourChar) {
+    private int[] getBestMove(Matrix matrix) {
         int[] bestMove = new int[]{-1, -1};
-        int bestScore = (yourChar == 'X') ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+        int bestScore = (super.getPlayerChar() == 'X') ? Integer.MIN_VALUE : Integer.MAX_VALUE;
 
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[i].length; j++) {
-                if (matrix[i][j] == ' ') {
-                    matrix[i][j] = yourChar;
-                    int score = minimax(matrix, 10, otherChar(yourChar));
-                    matrix[i][j] = ' ';
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (matrix.getChar(i, j) == ' ') {
+                    matrix.performMove(this.getPlayerChar(), i, j);
+                    int score = minimax(matrix, 10, otherChar(this.getPlayerChar()));
+                    matrix.performMove(' ', i, j);
 
-                    if ((yourChar == 'X' && score > bestScore) || (yourChar == 'O' && score < bestScore)) {
+                    if ((super.getPlayerChar() == 'X' && score > bestScore) || (this.getPlayerChar() == 'O' && score < bestScore)) {
                         bestScore = score;
                         bestMove[0] = i;
                         bestMove[1] = j;
@@ -34,38 +38,38 @@ public class HardAI implements Player {
         return bestMove;
     }
 
-    private static int minimax(char[][] matrix, int depth, char yourChar) {
+    private static int minimax(Matrix matrix, int depth, char yourChar) {
 
-        if (checkWinner(matrix).equals(Result.XWINS)) {
+        if (matrix.checkWinner().equals(Result.XWINS)) {
             return 10;
         }
-        if (checkWinner(matrix).equals(Result.OWINS)) {
+        if (matrix.checkWinner().equals(Result.OWINS)) {
             return -10;
         }
-        if (checkWinner(matrix).equals(Result.DRAW)) {
+        if (matrix.checkWinner().equals(Result.DRAW)) {
             return 0;
         }
 
         if (yourChar == 'X') {
             int highestVal = Integer.MIN_VALUE;
-            for (int row = 0; row < matrix.length; row++) {
-                for (int col = 0; col < matrix.length; col++) {
-                    if (matrix[row][col] == ' ') {
-                        matrix[row][col] = 'X';
+            for (int row = 0; row < matrix.length(); row++) {
+                for (int col = 0; col < matrix.length(); col++) {
+                    if (matrix.getChar(row, col) == ' ') {
+                        matrix.performMove('X', row, col);
                         highestVal = Math.max(highestVal, minimax(matrix, depth - 1, 'O'));
-                        matrix[row][col] = ' ';
+                        matrix.performMove(' ', row, col);
                     }
                 }
             }
             return highestVal;
         } else {
             int lowestVal = Integer.MAX_VALUE;
-            for (int row = 0; row < matrix.length; row++) {
-                for (int col = 0; col < matrix.length; col++) {
-                    if (matrix[row][col] == ' ') {
-                        matrix[row][col] = 'O';
+            for (int row = 0; row < matrix.length(); row++) {
+                for (int col = 0; col < matrix.length(); col++) {
+                    if (matrix.getChar(row, col) == ' ') {
+                        matrix.performMove('O', row, col);
                         lowestVal = Math.min(lowestVal, minimax(matrix, depth - 1, 'X'));
-                        matrix[row][col] = ' ';
+                        matrix.performMove(' ', row, col);
                     }
                 }
             }

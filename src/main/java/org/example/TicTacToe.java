@@ -2,19 +2,18 @@ package org.example;
 
 import java.util.Scanner;
 import java.util.Set;
-import static org.example.Matrix.*;
 
 
 public class TicTacToe {
     private static final String INPUT = "Input command";
-    private static final String BADPARAMETERS = "Bad parameters!";
+    private static final String BAD_PARAMETERS = "Bad parameters!";
     public static void main(String[] args) {
         menu();
     }
 
     public static void menu() {
 
-        char[][] matrix = createEmptyDeck();
+        Matrix matrix = new Matrix();
 
         Scanner sc = new Scanner(System.in);
         System.out.println(INPUT);
@@ -23,7 +22,7 @@ public class TicTacToe {
 
         if (input.equals("exit")) System.exit(0);
         if (strings.length != 3) {
-            System.out.println(BADPARAMETERS);
+            System.out.println(BAD_PARAMETERS);
             menu();
         }
 
@@ -34,41 +33,30 @@ public class TicTacToe {
                 Set.of("user", "easy", "medium", "hard").contains(strings[1]) &&
                 Set.of("user", "easy", "medium", "hard").contains(strings[2])) {
 
-            player1 = switch (strings[1]) {
-                case "easy" -> new EasyAI();
-                case "user" -> new User();
-                case "medium" -> new MediumAI();
-                default -> new HardAI();
-            };
+            player1 = Player.createPlayer(strings[1], 'X');
+            player2 = Player.createPlayer(strings[2], 'O');
 
-            player2 = switch (strings[2]) {
-                case "easy" -> new EasyAI();
-                case "user" -> new User();
-                case "medium" -> new MediumAI();
-                default -> new HardAI();
-            };
-
-            printMatrix(matrix);
+            matrix.printMatrix();
             play(matrix, player1, player2);
         } else {
-            System.out.println(BADPARAMETERS);
+            System.out.println(BAD_PARAMETERS);
             menu();
         }
     }
 
-    public static void play(char[][] matrix, Player player1, Player player2) {
-        while (checkWinner(matrix).equals(Result.GAMENOTFINISHED)) {
-            matrix = player1.makeMove(matrix, 'X');
-            printMatrix(matrix);
-            if (checkWinner(matrix).equals(Result.GAMENOTFINISHED)) {
-                matrix = player2.makeMove(matrix, 'O');
-                printMatrix(matrix);
-                if (checkCharWinner(matrix, 'O')) {
-                    System.out.println(checkWinner(matrix).toString());
+    public static void play(Matrix matrix, Player player1, Player player2) {
+        while (matrix.checkWinner().equals(Result.GAMENOTFINISHED)) {
+            matrix = player1.makeMove(matrix);
+            matrix.printMatrix();
+            if (matrix.checkWinner().equals(Result.GAMENOTFINISHED)) {
+                matrix = player2.makeMove(matrix);
+                matrix.printMatrix();
+                if (matrix.checkCharWinner('O')) {
+                    System.out.println(matrix.checkWinner().toString());
                     return;
                 }
             } else {
-                System.out.println(checkWinner(matrix).toString());
+                System.out.println(matrix.checkWinner().toString());
                 return;
             }
         }

@@ -2,14 +2,16 @@ package org.example;
 
 import java.util.Scanner;
 
-import static org.example.Matrix.checkWinner;
-import static org.example.Matrix.printMatrix;
 
-public class User implements Player {
+public class User extends Player {
+
+    User(char playerChar) {
+        super(playerChar);
+    }
 
     @Override
-    public char[][] makeMove(char[][] matrix, char playerChar) {
-        if (checkWinner(matrix).equals(Result.GAMENOTFINISHED)) {
+    public Matrix makeMove(Matrix matrix) {
+        if (matrix.checkWinner().equals(Result.GAMENOTFINISHED)) {
             Scanner sc = new Scanner(System.in);
             System.out.println("Enter the coordinates:");
             int row = -1;
@@ -20,32 +22,32 @@ public class User implements Player {
                 column = sc.nextInt();
                 if (row > 3 || row < 1 || column > 3 || column < 1) {
                     System.out.println("Coordinates should be from 1 to 3!");
-                    makeMove(matrix, playerChar);
-                } else if (matrix[row - 1][column - 1] != ' ') {
+                    makeMove(matrix);
+                } else if (matrix.getChar(row - 1, column - 1) != ' ') {
                     System.out.println("This cell is occupied! Choose another one!");
-                    makeMove(matrix, playerChar);
+                    makeMove(matrix);
                 }
             } else {
                 System.out.println("You should enter numbers!");
-                makeMove(matrix, playerChar);
+                makeMove(matrix);
             }
 
-            matrix[row - 1][column - 1] = playerChar;
+            matrix.performMove(this.getPlayerChar(), row - 1, column - 1);
 
-            if (checkWinner(matrix).toString().equals(playerChar + " wins")) {
-                printMatrix(matrix);
-                System.out.println(checkWinner(matrix).toString());
+            if (matrix.checkWinner().toString().equals(this.getPlayerChar() + " wins")) {
+                matrix.printMatrix();
+                System.out.println(matrix.checkWinner().toString());
                 return matrix;
-            } else if (checkWinner(matrix).toString().equals("Draw")) {
-                printMatrix(matrix);
-                System.out.println(checkWinner(matrix).toString());
+            } else if (matrix.checkWinner().toString().equals("Draw")) {
+                matrix.printMatrix();
+                System.out.println(matrix.checkWinner().toString());
                 return matrix;
             }
 
-        } else if (checkWinner(matrix).equals(Result.IMPOSSIBLE)) {
+        } else if (matrix.checkWinner().equals(Result.IMPOSSIBLE)) {
             System.out.println("This matrix is not valid");
         }
-        else if (checkWinner(matrix).equals(Result.DRAW)) {
+        else if (matrix.checkWinner().equals(Result.DRAW)) {
             System.out.println("It is a draw!");
         }
         return matrix;

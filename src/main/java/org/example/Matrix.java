@@ -2,29 +2,55 @@ package org.example;
 
 public class Matrix {
 
-    static Result checkWinner(char[][] matrix) {
-        if (Math.abs(countXOs(matrix, 'X') - countXOs(matrix, 'O')) > 1) {
+    private final char[][] matrix;
+
+    Matrix() {
+        matrix = createEmptyDeck();
+    }
+
+    Matrix(char[][] initialMatrix) {
+        matrix = initialMatrix;
+    }
+
+    public void performMove(char playerChar, int row, int col) {
+        matrix[row][col] = playerChar;
+    }
+
+    public int length() {
+        return 3;
+    }
+
+    public char[][] getInstance() {
+        return matrix;
+    }
+
+    public char getChar(int row, int col) {
+        return matrix[row][col];
+    }
+
+    Result checkWinner() {
+        if (Math.abs(countXOs('X') - countXOs('O')) > 1) {
             return Result.IMPOSSIBLE;
         }
-        if (checkCharWinner(matrix, 'X') && checkCharWinner(matrix, 'O')) {
+        if (checkCharWinner('X') && checkCharWinner('O')) {
             return Result.IMPOSSIBLE;
         }
 
-        if (checkCharWinner(matrix, 'X')) {
+        if (checkCharWinner('X')) {
             return Result.XWINS;
         }
 
-        if (checkCharWinner(matrix, 'O')) {
+        if (checkCharWinner('O')) {
             return Result.OWINS;
         }
 
-        if (notFull(matrix)) {
+        if (notFull()) {
             return Result.GAMENOTFINISHED;
         }
         return Result.DRAW;
     }
 
-    static boolean checkCharWinner(char[][] matrix, char character) {
+    boolean checkCharWinner(char character) {
         if (matrix[0][0] == character && matrix[0][1] == character && matrix[0][2] == character) {
             return true;
         }
@@ -52,7 +78,7 @@ public class Matrix {
         return false;
     }
 
-    static int countXOs(char[][] matrix, char character) {
+    int countXOs(char character) {
         int characterCount = 0;
         for (char[] chars : matrix) {
             for (char aChar : chars) {
@@ -64,7 +90,7 @@ public class Matrix {
         return characterCount;
     }
 
-    static void printMatrix(char[][] matrix) {
+    void printMatrix() {
         System.out.println("-----------");
         for (int i = 0; i < 3; i++) {
             System.out.println("| " + matrix[i][0] + " " + matrix[i][1] + " " + matrix[i][2] + " |");
@@ -72,7 +98,7 @@ public class Matrix {
         System.out.println("-----------");
     }
 
-    static boolean notFull(char[][] matrix) {
+    boolean notFull() {
         for (char[] chars : matrix) {
             for (char aChar : chars) {
                 if (aChar == ' ') {
