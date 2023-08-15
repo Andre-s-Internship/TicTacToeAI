@@ -10,7 +10,7 @@ public class EasyAI extends Player {
 
     @Override
     public Matrix makeMove(Matrix matrix) {
-        if (matrix.checkWinner().equals(Result.GAMENOTFINISHED)) {
+        if (matrix.checkWinner().equals(Result.GAME_NOT_FINISHED)) {
             System.out.println("Making move level \"easy\"");
             matrix = randomMoveGenerator(matrix, this.getPlayerChar(), new Random());
         }

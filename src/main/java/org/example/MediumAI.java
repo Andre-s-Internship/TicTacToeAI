@@ -12,7 +12,7 @@ public class MediumAI extends Player {
 
     @Override
     public Matrix makeMove(Matrix matrix) {
-        if (matrix.checkWinner().equals(Result.GAMENOTFINISHED)) {
+        if (matrix.checkWinner().equals(Result.GAME_NOT_FINISHED)) {
             System.out.println("Making move level \"medium\"");
             Matrix instantWin = instantWin(matrix, this.getPlayerChar());
             if (instantWin != null) {

@@ -45,7 +45,7 @@ public class Matrix {
         }
 
         if (notFull()) {
-            return Result.GAMENOTFINISHED;
+            return Result.GAME_NOT_FINISHED;
         }
         return Result.DRAW;
     }

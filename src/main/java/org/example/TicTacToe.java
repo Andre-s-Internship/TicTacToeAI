@@ -45,10 +45,10 @@ public class TicTacToe {
     }
 
     public static void play(Matrix matrix, Player player1, Player player2) {
-        while (matrix.checkWinner().equals(Result.GAMENOTFINISHED)) {
+        while (matrix.checkWinner().equals(Result.GAME_NOT_FINISHED)) {
             matrix = player1.makeMove(matrix);
             matrix.printMatrix();
-            if (matrix.checkWinner().equals(Result.GAMENOTFINISHED)) {
+            if (matrix.checkWinner().equals(Result.GAME_NOT_FINISHED)) {
                 matrix = player2.makeMove(matrix);
                 matrix.printMatrix();
                 if (matrix.checkCharWinner('O')) {

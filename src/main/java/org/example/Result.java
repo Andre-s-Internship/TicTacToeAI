@@ -7,7 +7,7 @@ public enum Result {
             return "Impossible";
         }
     },
-    GAMENOTFINISHED{
+    GAME_NOT_FINISHED {
         @Override
         public String toString() {
             return "Game not finished";

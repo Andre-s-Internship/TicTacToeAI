@@ -11,7 +11,7 @@ public class User extends Player {
 
     @Override
     public Matrix makeMove(Matrix matrix) {
-        if (matrix.checkWinner().equals(Result.GAMENOTFINISHED)) {
+        if (matrix.checkWinner().equals(Result.GAME_NOT_FINISHED)) {
             Scanner sc = new Scanner(System.in);
             System.out.println("Enter the coordinates:");
             int row = -1;
